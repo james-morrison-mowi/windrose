@@ -210,27 +210,8 @@ class WindroseAxes(PolarAxes):
                                facecolor=color, edgecolor='black'))
             return handles
 
-#        def get_labels(decimal_places=1):
-#            _decimal_places = str(decimal_places)
-#
-#            fmt = (
-#                "[%." + _decimal_places + "f " +
-#                ": %0." + _decimal_places + "f"
-#            )
-#
-#            labels = np.copy(self._info['bins'])
-#            if locale.getlocale()[0] in ['fr_FR']:
-#                fmt += '['
-#            else:
-#                fmt += ')'
-#
-#            labels = [fmt % (labels[i], labels[i + 1])
-#                      for i in range(len(labels) - 1)]
-#            return labels
-
         def get_labels():
             labels = np.copy(self._info['bins'])
-            print(labels)
             labels = ["%.2f : %0.2f" %(labels[i], labels[i+1]) \
                       for i in range(len(labels)-1)]
             return labels
@@ -747,16 +728,6 @@ def wrscatter(direction, var, ax=None, rmax=None, *args, **kwargs):
     ax.scatter(direction, var, *args, **kwargs)
     return ax
 
-# def clean(direction, var):
-#     '''
-#     Remove masked values in the two arrays, where if a direction data is masked,
-#     the var data will also be removed in the cleaning process (and vice-versa)
-#     '''
-#     dirmask = direction.mask==False
-#     varmask = direction.mask==False
-#     mask = dirmask*varmask
-#     return direction[mask], var[mask]
-
 
 def clean_df(df, var=VAR_DEFAULT, direction=DIR_DEFAULT):
     '''
@@ -820,10 +791,6 @@ def plot_windrose_np(direction, var, kind='contour', clean_flag=True, by=None, r
         f_plot = D_KIND_PLOT[kind]
     else:
         raise(Exception("kind=%r but it must be in %r" % (kind, D_KIND_PLOT.keys())))
-    # if f_clean is not None:
-    #     df = f_clean(df)
-    # var = df[var_name].values
-    # direction = df[direction_name].values
     if clean_flag:
         var, direction = clean(var, direction)
     if by is None:
